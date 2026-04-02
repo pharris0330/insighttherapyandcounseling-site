@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { base44 } from "@/api/base44Client";
 
 const contactInfo = [
   {
@@ -20,7 +19,7 @@ const contactInfo = [
     icon: Mail,
     label: "Email",
     value: "insighttherapyandcounseling@gmail.com",
-    href: "mailto:insighttherapyandcounseling@gmail.com",
+    href: "mailto:paul@shochoh.com",
   },
   {
     icon: MapPin,
@@ -50,25 +49,43 @@ export default function Contact() {
     e.preventDefault();
     setSending(true);
 
-    await base44.integrations.Core.SendEmail({
-      to: "insighttherapyandcounseling@gmail.com",
-      subject: `New Inquiry from ${form.name}`,
-      body: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${form.name}</p>
-        <p><strong>Email:</strong> ${form.email}</p>
-        <p><strong>Phone:</strong> ${form.phone || "Not provided"}</p>
-        <p><strong>Message:</strong></p>
-        <p>${form.message}</p>
-      `,
-    });
+    try {
+      const response = await fetch("https://formspree.io/f/xnjoblgp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone || "Not provided",
+          message: form.message,
+        }),
+      });
 
-    toast({
-      title: "Message Sent",
-      description:
-        "Thank you for reaching out. Jamaal will get back to you soon.",
-    });
-    setForm({ name: "", email: "", phone: "", message: "" });
+      if (response.ok) {
+        toast({
+          title: "Message Sent",
+          description:
+            "Thank you for reaching out. Jamaal will get back to you soon.",
+        });
+        setForm({ name: "", email: "", phone: "", message: "" });
+      } else {
+        toast({
+          title: "Something went wrong",
+          description: "Please try again or email us directly.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Network Error",
+        description: "Please check your connection and try again.",
+        variant: "destructive",
+      });
+    }
+
     setSending(false);
   };
 
@@ -173,9 +190,7 @@ export default function Contact() {
                     placeholder="Your Name"
                     required
                     value={form.name}
-                    onChange={(e) =>
-                      setForm({ ...form, name: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
                     className="h-12 rounded-xl bg-background"
                   />
                 </div>
@@ -185,9 +200,7 @@ export default function Contact() {
                     placeholder="Email Address"
                     required
                     value={form.email}
-                    onChange={(e) =>
-                      setForm({ ...form, email: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
                     className="h-12 rounded-xl bg-background"
                   />
                 </div>
@@ -196,9 +209,7 @@ export default function Contact() {
                     type="tel"
                     placeholder="Phone Number (Optional)"
                     value={form.phone}
-                    onChange={(e) =>
-                      setForm({ ...form, phone: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     className="h-12 rounded-xl bg-background"
                   />
                 </div>
@@ -208,9 +219,7 @@ export default function Contact() {
                     required
                     rows={5}
                     value={form.message}
-                    onChange={(e) =>
-                      setForm({ ...form, message: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
                     className="rounded-xl bg-background resize-none"
                   />
                 </div>
