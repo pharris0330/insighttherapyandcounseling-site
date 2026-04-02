@@ -37,7 +37,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6 pt-4 pb-2 flex flex-col items-center">
         <Link to="/" className="flex flex-col items-center gap-1 mb-3 group">
           <img
-            src="/insight-logo.png"
+            src="/og-image.png"
             alt="Insight Therapy and Counseling Logo"
             className="w-16 h-16 object-contain drop-shadow-[0_0_8px_rgba(240,192,64,0.3)]"
             onError={(e) => {
