@@ -28,35 +28,56 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-background/95 backdrop-blur-md shadow-sm" : "bg-background"
+        scrolled
+          ? "bg-primary/98 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
+          : "bg-primary"
       }`}
     >
       {/* Top centered logo */}
-      <div className="max-w-6xl mx-auto px-6 pt-5 pb-2 flex flex-col items-center">
-        <Link to="/" className="flex flex-col items-center gap-1 mb-3">
+      <div className="max-w-6xl mx-auto px-6 pt-4 pb-2 flex flex-col items-center">
+        <Link to="/" className="flex flex-col items-center gap-1 mb-3 group">
           <img
-            src="https://media.base44.com/images/public/69c68e93e516ae05a78f406a/02ebce721_generated_3963f23d.png"
-            alt="Insight Therapy Logo"
-            className="w-14 h-14 rounded-full"
+            src="/insight-logo.png"
+            alt="Insight Therapy and Counseling Logo"
+            className="w-16 h-16 object-contain drop-shadow-[0_0_8px_rgba(240,192,64,0.3)]"
+            onError={(e) => {
+              // Fallback: render SVG brain-tree icon inline if image fails
+              e.target.style.display = "none";
+            }}
           />
-          <span className="font-heading text-xl font-semibold text-foreground tracking-wide leading-none">
-            Insight
+          {/* Fallback SVG logo if image not found */}
+          <svg
+            className="w-16 h-16 hidden"
+            id="logo-fallback"
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M50 85 L50 55 M50 55 C50 55 35 45 30 30 C25 15 38 8 50 20 C62 8 75 15 70 30 C65 45 50 55 50 55Z"
+              stroke="#F0C040"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </svg>
+          <span className="font-heading text-2xl font-bold text-accent tracking-widest uppercase leading-none">
+            INSIGHT
           </span>
-          <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-            Therapy & Counseling Services, LLC
+          <span className="text-[9px] uppercase tracking-[0.3em] text-accent/60">
+            Therapy & Counseling
           </span>
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-10 border-t border-border w-full justify-center pt-3 pb-1">
+        <div className="hidden md:flex items-center gap-10 border-t border-accent/20 w-full justify-center pt-3 pb-1">
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
-              className={`text-sm font-medium transition-colors duration-300 hover:text-accent ${
+              className={`text-sm font-medium tracking-wider uppercase transition-colors duration-300 hover:text-accent ${
                 location.pathname === link.path
                   ? "text-accent"
-                  : "text-foreground/70"
+                  : "text-accent/50"
               }`}
             >
               {link.label}
@@ -66,7 +87,7 @@ export default function Navbar() {
             href="https://www.therapyportal.com/p/Insight32226/appointments/availability/#AvailabilityClinician=666417&AvailabilityLocation=334903"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-accent hover:text-accent/80 transition-colors"
+            className="text-sm font-semibold tracking-wider uppercase px-5 py-1.5 border border-accent/60 text-accent rounded-full hover:bg-accent hover:text-primary transition-all duration-300"
           >
             Get Started
           </a>
@@ -75,9 +96,9 @@ export default function Navbar() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden absolute top-5 right-6 p-2 text-foreground"
+          className="md:hidden absolute top-5 right-6 p-2 text-accent"
         >
-          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
@@ -88,17 +109,18 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background border-t border-border overflow-hidden"
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-primary border-t border-accent/20 overflow-hidden"
           >
-            <div className="px-6 py-6 space-y-4 text-center">
+            <div className="px-6 py-6 flex flex-col gap-5">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`block text-base font-medium transition-colors ${
+                  className={`text-sm font-medium tracking-wider uppercase transition-colors ${
                     location.pathname === link.path
                       ? "text-accent"
-                      : "text-foreground/70"
+                      : "text-accent/50"
                   }`}
                 >
                   {link.label}
@@ -108,7 +130,7 @@ export default function Navbar() {
                 href="https://www.therapyportal.com/p/Insight32226/appointments/availability/#AvailabilityClinician=666417&AvailabilityLocation=334903"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-base font-medium text-accent"
+                className="text-sm font-semibold tracking-wider uppercase px-5 py-2 border border-accent/60 text-accent rounded-full text-center hover:bg-accent hover:text-primary transition-all duration-300"
               >
                 Get Started
               </a>
