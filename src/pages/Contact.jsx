@@ -19,7 +19,7 @@ const contactInfo = [
     icon: Mail,
     label: "Email",
     value: "insighttherapyandcounseling@gmail.com",
-    href: "mailto:paul@shochoh.com",
+    href: "mailto:insighttherapyandcounseling@gmail.com",
   },
   {
     icon: MapPin,
